@@ -1,8 +1,13 @@
 
+use macroquad::miniquad::conf::Icon;
 use macroquad::prelude::*;
 use macroquad::audio::*;
 
-#[macroquad::main("Basket")]
+fn basket() -> Conf {
+    Conf { window_title: "Basket".to_string(), window_width: 800, window_height: 600, fullscreen: false, window_resizable: false, ..Default::default() }
+}
+
+#[macroquad::main(basket)]
 async fn main() {
     set_pc_assets_folder("assets");
 
