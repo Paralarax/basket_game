@@ -7,15 +7,15 @@ fn basket() -> Conf {
     Conf { window_title: "Basket".to_string(), window_width: 800, window_height: 600, fullscreen: false, window_resizable: false, ..Default::default() }
 }
 
+
 #[macroquad::main(basket)]
 async fn main() {
     set_pc_assets_folder("assets");
 
-    clear_background(BLACK);
-
     let text_dimensions = measure_text("Loading...", None, 52, 1.0);
     warn!("{:?}", text_dimensions);
 
+    clear_background(BLACK);
     draw_text("Loading...", screen_width() / 2.0 - text_dimensions.width / 2.0, screen_height() / 2.0 - text_dimensions.height / 2.0, 52.0, WHITE);
     next_frame().await;
 
@@ -33,8 +33,8 @@ async fn main() {
     // let mut sound_bytes_reader = BufReader::new(sound_file);
     // let mut sound_bytes: Vec<u8> = vec![];
 
-    
-
+    let mut apples_collection: Vec<Rect> = vec![];
+    apples_collection.push(Rect { x: screen_width() / 2.0, y: screen_height(), w: apple_texture.width(), h: apple_texture.height() });
     // sound_bytes_reader.read_to_end(&mut sound_bytes).unwrap();
 
 
@@ -54,7 +54,7 @@ async fn main() {
     let mut apple_y = 0.0;
     let mut apple_x = screen_width() / 2.0 - apple_texture.width() / 2.0;
 
-    let mut basket_rect = Rect::new(x, y, basket_texture.width(), basket_texture.height());
+    let mut basket_rect = Rect::new(x + 40.0, y + 5.0, basket_texture.width() - 80.0, 14.0);
     let mut apple_rect = Rect::new(apple_x, apple_y, apple_texture.width(), apple_texture.height());
 
     let mut draw_apple = true;
@@ -80,7 +80,7 @@ async fn main() {
             break;
         }
 
-        basket_rect.x = x;
+        basket_rect.x = x + 40.0;
 
         apple_y += 1.0;
         apple_rect.y = apple_y;
@@ -100,7 +100,8 @@ async fn main() {
         
         draw_text(&format!("Score: {}", score), 5.0, 15.0, 32.0, WHITE);
         draw_texture(basket_texture, x, y, WHITE);
-
+        draw_rectangle(basket_rect.x, basket_rect.y, basket_texture.width() - 80.0, 14.0, ORANGE);
+        //draw_rectangle(apple_rect.x, apple_rect.y, apple_texture.width(), apple_rect.h, GREEN);
 
         next_frame().await;
     }
