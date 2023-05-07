@@ -34,7 +34,8 @@ async fn main() {
     // let mut sound_bytes: Vec<u8> = vec![];
 
     let mut apples_collection: Vec<Rect> = vec![];
-    apples_collection.push(Rect { x: screen_width() / 2.0, y: screen_height(), w: apple_texture.width(), h: apple_texture.height() });
+    apples_collection.push(Rect { x: screen_width() / 2.0 - apple_texture.width() / 2.0, y: 0.0, w: apple_texture.width(), h: apple_texture.height() });
+    apples_collection.push(Rect { x: 10.0, y: 0.0, w: apple_texture.width(), h: apple_texture.height() });
     // sound_bytes_reader.read_to_end(&mut sound_bytes).unwrap();
 
 
@@ -82,20 +83,32 @@ async fn main() {
 
         basket_rect.x = x + 40.0;
 
-        apple_y += 1.0;
-        apple_rect.y = apple_y;
+        // apple_y += 1.0;
+        // apple_rect.y = apple_y;
 
-        if basket_rect.overlaps(&apple_rect) && draw_apple {
-            draw_apple = false;
-            score += 1;
+        // if basket_rect.overlaps(&apple_rect) && draw_apple {
+        //     draw_apple = false;
+        //     score += 1;
+        // }
+
+        for apple in apples_collection.iter_mut() {
+            apple.y += 1.0;
         }
 
+
+        apples_collection.retain(|&apple| {
+            !apple.overlaps(&basket_rect)
+        });
 
         //draw_texture(texture, 0.0, 0.0, WHITE);
         draw_texture_ex(background_texture, 0.0, 0.0, WHITE, DrawTextureParams { dest_size: Some(Vec2::new(800.0, 600.0)), ..Default::default()});
 
-        if draw_apple {
-            draw_texture(apple_texture, apple_x, apple_y, WHITE);
+        // if draw_apple {
+        //     draw_texture(apple_texture, apple_x, apple_y, WHITE);
+        // }
+
+        for apple in apples_collection.iter() {
+            draw_texture(apple_texture, apple.x, apple.y, WHITE);
         }
         
         draw_text(&format!("Score: {}", score), 5.0, 15.0, 32.0, WHITE);
