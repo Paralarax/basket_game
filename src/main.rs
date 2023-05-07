@@ -97,7 +97,13 @@ async fn main() {
 
 
         apples_collection.retain(|&apple| {
-            !apple.overlaps(&basket_rect)
+            let collided = apple.overlaps(&basket_rect);
+
+            if collided {
+                score += 1;
+            }
+
+            !collided
         });
 
         //draw_texture(texture, 0.0, 0.0, WHITE);
