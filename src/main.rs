@@ -12,19 +12,26 @@ fn basket() -> Conf {
 async fn main() {
     set_pc_assets_folder("assets");
 
-    let font = load_ttf_font("font.ttf").await.expect("Could not load the font!");
+    let font = load_ttf_font("retro.ttf").await.expect("Could not load the font!");
     let text_dimensions = measure_text("LOADING", Some(font), 52, 1.0);
     warn!("{:?}", text_dimensions);
 
-    let text_settings = TextParams { font: font, font_size: 52, color: WHITE, ..Default::default() };
+    // clear_background(BLACK);
+    // next_frame().await;
+
+    let background_texture: Texture2D = load_texture("tree.png").await.expect("Could not load the background texture!");
+    
+
+    let loading_text_settings = TextParams { font: font, font_size: 52, color: WHITE, ..Default::default() };
+    let score_text_settings = TextParams { font: font, font_size: 22, color: WHITE, ..Default::default() };
 
     clear_background(BLACK);
-    draw_text_ex("LOADING", screen_width() / 2.0 - text_dimensions.width / 2.0, screen_height() / 2.0 - text_dimensions.height / 2.0, text_settings);
+    draw_texture_ex(background_texture, 0.0, 0.0, WHITE, DrawTextureParams { dest_size: Some(Vec2::new(800.0, 600.0)), ..Default::default()});
+    draw_text_ex("LOADING", screen_width() / 2.0 - text_dimensions.width / 2.0, screen_height() / 2.0 - text_dimensions.height / 2.0, loading_text_settings);
     next_frame().await;
 
     let basket_texture: Texture2D = load_texture("basket.png").await.expect("Could not find texture!");
     let apple_texture: Texture2D = load_texture("apple.png").await.expect("Could not find texture!");
-    let background_texture: Texture2D = load_texture("tree.png").await.expect("Could not load the background texture!");
     
     
     //let texture = Texture2D::from_image(&image);
@@ -122,7 +129,7 @@ async fn main() {
             draw_texture(apple_texture, apple.x, apple.y, WHITE);
         }
         
-        draw_text_ex(&format!("SCORE {}", score), 5.0, 15.0, text_settings);
+        draw_text_ex(&format!("SCORE: {}", score), 5.0, 25.0, score_text_settings);
         draw_texture(basket_texture, x, y, WHITE);
         draw_rectangle(basket_rect.x, basket_rect.y, basket_texture.width() - 80.0, 14.0, ORANGE);
         //draw_rectangle(apple_rect.x, apple_rect.y, apple_texture.width(), apple_rect.h, GREEN);
