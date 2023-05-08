@@ -41,6 +41,7 @@ async fn main() {
 
     // let sound = load_sound_from_bytes(&sound_bytes).await.unwrap();
     let game_loop_sound = load_sound("loop.ogg").await.expect("Could not load sound!");
+    let apple_collected_sound = load_sound("apple_collected.ogg").await.expect("Could not loud sound!");
 
     let mut score: u32 = 0;
 
@@ -101,6 +102,7 @@ async fn main() {
 
             if collided {
                 score += 1;
+                play_sound_once(apple_collected_sound);
             }
 
             !collided
